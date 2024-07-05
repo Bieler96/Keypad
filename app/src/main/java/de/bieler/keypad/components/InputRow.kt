@@ -21,6 +21,15 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * Displays a row of buttons for the keypad, with each button having an animation effect on click.
+ *
+ * This composable function generates a row of buttons for the keypad UI. Each button is represented by a text label
+ * and executes a provided callback function when clicked. The buttons also feature a subtle animation effect that
+ * temporarily changes the text size to indicate a click.
+ *
+ * @param list A list of pairs, where each pair consists of a button's text label and the callback function to be executed on click.
+ */
 @Composable
 fun InputRow(
     list: List<Pair<String, () -> Unit>>
