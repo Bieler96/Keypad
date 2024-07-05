@@ -20,6 +20,14 @@ import androidx.compose.ui.unit.dp
 import de.bieler.keypad.utils.Vibrate.errorVibrate
 import de.bieler.keypad.utils.Vibrate.vibrate
 
+/**
+ * A customizable keypad composable function that allows input of a numeric PIN code.
+ *
+ * @param maxDigits The maximum number of digits allowed in the PIN. Defaults to 4.
+ * @param onConfirm A callback function that is invoked when the PIN is confirmed. It provides the entered PIN and a function to clear the PIN as parameters.
+ * @param autoConfirm Automatically confirms the PIN once the max number of digits is reached. Defaults to false.
+ * @param autoClearAfterConfirm Automatically clears the PIN after confirmation. Useful for one-time use scenarios. Defaults to false.
+ */
 @Composable
 fun Keypad(
     maxDigits: Int = 4,
@@ -31,11 +39,21 @@ fun Keypad(
     var pin by remember { mutableStateOf("") }
     var digits by remember { mutableStateOf(emptyList<String>()) }
 
+    /**
+     * Clears the current PIN and the list of entered digits.
+     */
     fun onClearClick() {
         pin = ""
         digits = emptyList()
     }
 
+    /**
+     * Handles digit button clicks.
+     * Adds the digit to the PIN and list of digits if the maxDigits limit has not been reached.
+     * Triggers vibration feedback and optionally confirms the PIN if autoConfirm is enabled.
+     *
+     * @param digit The digit that was clicked.
+     */
     fun onDigitClick(digit: String) {
         if (digits.size >= maxDigits) {
             errorVibrate(context)
@@ -55,6 +73,9 @@ fun Keypad(
         }
     }
 
+    /**
+     * Removes the last digit from the PIN and the list of digits.
+     */
     fun onRemoveClick() {
         if (digits.isNotEmpty()) {
             pin = pin.dropLast(1)

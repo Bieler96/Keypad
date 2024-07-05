@@ -13,7 +13,15 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
+/**
+ * Displays an animated text that changes its size when first displayed.
+ *
+ * This composable function creates a text element that initially appears larger or smaller
+ * and then animates to its target size. The size transition is triggered upon initial display,
+ * simulating a click effect without actual user interaction.
+ *
+ * @param text The text content to be displayed.
+ */
 @Composable
 fun AnimatedText(text: String) {
     var isClicked by remember { mutableStateOf(true) }
