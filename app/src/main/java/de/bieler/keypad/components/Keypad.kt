@@ -1,26 +1,14 @@
 package de.bieler.keypad.components
 
-import android.content.Context
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,9 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import de.bieler.keypad.utils.Vibrate.errorVibrate
+import de.bieler.keypad.utils.Vibrate.vibrate
 
 @Composable
 fun Keypad(
@@ -140,83 +127,4 @@ fun Keypad(
             }
         }
     }
-}
-
-@Composable
-fun InputRow(
-    list: List<Pair<String, () -> Unit>>
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        list.forEach { (text, onClick) ->
-            val interactionSource = remember { MutableInteractionSource() }
-            var isClicked by remember { mutableStateOf(false) }
-            val textSize by animateFloatAsState(
-                targetValue = if (isClicked) MaterialTheme.typography.displayMedium.fontSize.value else MaterialTheme.typography.displaySmall.fontSize.value,
-                label = ""
-            )
-
-            LaunchedEffect(isClicked) {
-                launch {
-                    delay(50)
-                    isClicked = false
-                }
-            }
-
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .aspectRatio(1.5f)
-                    .clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        isClicked = true
-                        onClick()
-                    }
-            ) {
-                Text(text = text, fontSize = textSize.sp)
-            }
-        }
-    }
-}
-
-fun vibrate(context: Context) {
-    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
-    } else {
-        @Suppress("DEPRECATION")
-        vibrator.vibrate(50)
-    }
-}
-
-fun errorVibrate(context: Context) {
-    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrator.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE))
-    } else {
-        @Suppress("DEPRECATION")
-        vibrator.vibrate(150)
-    }
-}
-
-@Composable
-fun AnimatedText(text: String) {
-    var isClicked by remember { mutableStateOf(true) }
-    val textSize by animateFloatAsState(
-        targetValue = if (isClicked) MaterialTheme.typography.displaySmall.fontSize.value else MaterialTheme.typography.displayLarge.fontSize.value,
-        label = ""
-    )
-
-    LaunchedEffect(isClicked) {
-        launch {
-            delay(0)
-            isClicked = false
-        }
-    }
-
-    Text(text = text, fontSize = textSize.sp)
 }
