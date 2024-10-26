@@ -52,8 +52,10 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
                         Keypad(
-                            autoConfirm = false,
+                            autoConfirm = true,
                             autoClearAfterConfirm = true,
+                            inputsWithBackground = true,
+                            dots = true,
                             onConfirm = { pin, _ ->
                                 if (pin == "1111") {
                                     containerColor.value = SuccessContainer
